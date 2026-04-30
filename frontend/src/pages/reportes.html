@@ -1,0 +1,42 @@
+<!--
+  reportes.html — Fragmento de página: Reportes y Análisis
+  =========================================================
+  Importado como texto plano (?raw) por reportes.js e inyectado en #main.
+
+  Estructura:
+    1. .page-header    → Título de la sección (sin botón de acción)
+    2. .reportes-tabs  → Tres botones de pestaña (Ventas / ITBIS / Inventario)
+    3. #reporte-contenido → Contenedor dinámico donde cada pestaña inyecta su HTML
+
+  Comportamiento de las pestañas (gestionado por reportes.js):
+    Ventas    → KPIs de ingresos + gráfico de barras + top 10 clientes
+    ITBIS     → Resumen del impuesto por periodo (para declaración DGII)
+    Inventario → Valorización del inventario y tabla de stock por producto
+
+  Notas:
+    - Al cargar la página, reportes.js activa automáticamente la pestaña "Ventas".
+    - Cada clic en un tab destruye el contenido anterior e inyecta el nuevo.
+    - Los estilos active/inactive de los tabs se manejan en reportes.js
+      (btn-primary para activo, btn-secondary para inactivos).
+-->
+
+<!-- Cabecera sin botón de acción (los reportes son de solo lectura) -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Reportes</h1>
+    <p class="page-subtitle">Análisis de ventas, ITBIS e inventario</p>
+  </div>
+</div>
+
+<!-- Botones de pestaña — reportes.js enlaza los clicks y gestiona el estado activo -->
+<div class="reportes-tabs">
+  <!-- Tab activo por defecto: Ventas (el estado visual lo pone reportes.js) -->
+  <button class="btn btn-primary btn-sm"   id="tab-ventas">Ventas</button>
+  <button class="btn btn-secondary btn-sm" id="tab-itbis">ITBIS</button>
+  <button class="btn btn-secondary btn-sm" id="tab-inventario">Inventario</button>
+</div>
+
+<!-- Área de contenido dinámico: cada pestaña inyecta aquí su HTML + gráficos -->
+<div id="reporte-contenido">
+  <div class="spinner"></div>
+</div>

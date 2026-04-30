@@ -1,0 +1,80 @@
+<!--
+  ncf.html — Fragmento de página: Gestión de Secuencias NCF
+  ==========================================================
+  Importado como texto plano (?raw) por ncf.js e inyectado en #main.
+
+  NCF = Número de Comprobante Fiscal
+  Regulación: DGII (Dirección General de Impuestos Internos) — República Dominicana.
+  Cada empresa debe tener secuencias autorizadas para emitir comprobantes fiscales.
+
+  Tipos de NCF soportados:
+    B01 — Crédito Fiscal (para empresas que declaran IVA)
+    B02 — Consumo (para consumidores finales sin NCF)
+    B14 — Régimen Especial
+    B15 — Gubernamental
+    B16 — Exportaciones
+
+  Estructura:
+    1. .page-header   → Título + botón "Nueva secuencia"
+    2. .card          → Texto informativo sobre los NCF y sus tipos
+    3. .table-wrapper → Tabla de secuencias con 8 columnas
+
+  Columnas de la tabla:
+    Tipo NCF | Prefijo | Rango autorizado | Usados | Restantes | Vencimiento | Estado | Acciones
+
+  Notas:
+    - ncf.js reemplaza el tbody (#ncf-tbody) con las secuencias del API.
+    - El estado se muestra con un badge: Activa (verde) / Inactiva (gris) / Vencida (rojo).
+    - Restantes ≤ 100 se muestran en amarillo, ≤ 10 en rojo (alerta de agotamiento).
+    - La página es solo visible para roles ADMIN y SUPERADMIN (control en sidebar.js).
+-->
+
+<!-- Cabecera: título de la sección y acción principal -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">NCF</h1>
+    <p class="page-subtitle">Gestión de Números de Comprobante Fiscal</p>
+  </div>
+  <!-- Abre el modal de nueva secuencia NCF (enlazado en ncf.js) -->
+  <button class="btn btn-primary" id="btn-nueva-secuencia">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Nueva secuencia
+  </button>
+</div>
+
+<!-- Tarjeta informativa: explica brevemente qué son los NCF -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-body">
+    <p style="font-size:.875rem;color:var(--gray-600);line-height:1.6">
+      Los NCF (Números de Comprobante Fiscal) son requeridos por la DGII de República Dominicana.
+      Cada tipo de comprobante tiene su propia secuencia numérica autorizada.
+      <strong>Tipos:</strong>
+      B01 = Crédito Fiscal, B02 = Consumo, B14 = Régimen Especial,
+      B15 = Gubernamental, B16 = Exportaciones.
+    </p>
+  </div>
+</div>
+
+<!-- Tabla de secuencias NCF -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tipo NCF</th>
+        <th>Prefijo</th>
+        <th>Rango autorizado</th>
+        <th>Usados</th>
+        <th>Restantes</th>
+        <th>Vencimiento</th>
+        <th>Estado</th>
+        <th class="col-actions">Acciones</th>
+      </tr>
+    </thead>
+    <!-- ncf.js reemplaza este spinner con las filas de secuencias -->
+    <tbody id="ncf-tbody">
+      <tr><td colspan="8"><div class="spinner"></div></td></tr>
+    </tbody>
+  </table>
+</div>

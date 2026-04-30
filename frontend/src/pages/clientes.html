@@ -1,0 +1,60 @@
+<!--
+  clientes.html — Fragmento de página: Gestión de Clientes
+  =========================================================
+  Este archivo es importado como texto plano (?raw) por clientes.js
+  e inyectado en el elemento <main id="main"> del shell de la aplicación.
+
+  Estructura:
+    1. .page-header   → Título de página + botón "Nuevo Cliente"
+    2. .toolbar       → Campo de búsqueda en tiempo real (filtra el array en memoria)
+    3. .table-wrapper → Tabla con columnas: Cliente, RNC/Cédula, Teléfono, Email, Acciones
+
+  Notas:
+    - El tbody (#clientes-tbody) comienza con un spinner que clientes.js reemplaza
+      con las filas de datos una vez que llega la respuesta de la API.
+    - Los botones de Editar/Eliminar son generados dinámicamente por clientes.js
+      (no están en este HTML) porque requieren el ID de cada cliente.
+    - La búsqueda filtra por: nombre, RNC, cédula y email (insensible a mayúsculas).
+-->
+
+<!-- Cabecera: título de la sección y acción principal -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Clientes</h1>
+    <p class="page-subtitle">Gestiona la cartera de clientes</p>
+  </div>
+  <!-- Abre el modal de creación de nuevo cliente (enlazado en clientes.js) -->
+  <button class="btn btn-primary" id="btn-nuevo-cliente">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Nuevo Cliente
+  </button>
+</div>
+
+<!-- Barra de búsqueda — filtra clientes localmente al escribir -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search-clientes"
+           placeholder="Buscar por nombre, RNC, cédula…" />
+  </div>
+</div>
+
+<!-- Tabla de clientes -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>RNC / Cédula</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th class="col-actions">Acciones</th>
+      </tr>
+    </thead>
+    <!-- clientes.js reemplaza este spinner con las filas de datos -->
+    <tbody id="clientes-tbody">
+      <tr><td colspan="5"><div class="spinner"></div></td></tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,77 @@
+<!--
+  inventario.html — Fragmento de página: Movimientos de Inventario
+  =================================================================
+  Importado como texto plano (?raw) por inventario.js e inyectado en #main.
+
+  Estructura:
+    1. .page-header   → Título + botón "Registrar movimiento"
+    2. .filters-bar   → Filtro por tipo de movimiento + acciones rápidas
+    3. .table-wrapper → Tabla de movimientos con 5 columnas
+
+  Tipos de movimiento (gestionados por inventario.js):
+    ENTRADA — Compra o recepción de mercancía (incrementa stock)
+    SALIDA  — Merma, pérdida o uso interno (disminuye stock)
+    AJUSTE  — Establece el stock exacto (sobreescribe el valor actual)
+
+  Columnas de la tabla:
+    Producto | Tipo | Cantidad | Motivo | Fecha
+
+  Notas:
+    - El botón "⚠ Stock bajo" abre un modal con la lista de productos
+      cuyo stock está en o por debajo del stock mínimo configurado.
+    - El filtro por tipo envía una nueva petición al servidor.
+    - El tbody (#inv-tbody) es rellenado por inventario.js.
+-->
+
+<!-- Cabecera: título de la sección y acción principal -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Inventario</h1>
+    <p class="page-subtitle">Movimientos de stock y control de inventario</p>
+  </div>
+  <!-- Abre el modal para registrar un nuevo movimiento (enlazado en inventario.js) -->
+  <button class="btn btn-primary" id="btn-nuevo-mov">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Registrar movimiento
+  </button>
+</div>
+
+<!-- Barra de filtros y acciones rápidas -->
+<div class="filters-bar">
+
+  <!-- Selector de tipo de movimiento para filtrar la tabla -->
+  <select class="filter-select" id="filtro-tipo">
+    <option value="">Todos los tipos</option>
+    <option value="ENTRADA">Entrada</option>
+    <option value="SALIDA">Salida</option>
+    <option value="AJUSTE">Ajuste</option>
+  </select>
+
+  <!-- Aplica el filtro por tipo enviando petición al servidor -->
+  <button class="btn btn-secondary btn-sm" id="btn-filtrar">Filtrar</button>
+
+  <!-- Consulta y muestra los productos bajo el mínimo de stock en un modal -->
+  <button class="btn btn-secondary btn-sm" id="btn-stock-bajo">⚠ Stock bajo</button>
+
+</div>
+
+<!-- Tabla de movimientos de inventario -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Motivo</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <!-- inventario.js reemplaza este spinner con las filas de datos -->
+    <tbody id="inv-tbody">
+      <tr><td colspan="5"><div class="spinner"></div></td></tr>
+    </tbody>
+  </table>
+</div>

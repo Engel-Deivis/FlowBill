@@ -1,0 +1,104 @@
+<!--
+  dashboard.html — Fragmento de página: Dashboard / Resumen ejecutivo
+  ====================================================================
+  Importado como texto plano (?raw) por dashboard.js e inyectado en #main.
+
+  Estructura:
+    1. .kpi-grid      → 4 tarjetas de métricas clave (KPIs)
+    2. .charts-grid   → Gráfico de ventas 30 días + Top clientes
+    3. .bottom-grid   → Facturas recientes + Alertas de stock bajo
+
+  Comportamiento dinámico (gestionado por dashboard.js):
+    - #kpis            → Se reemplaza con los valores de la API (ventas, ITBIS, etc.)
+    - #chart-ventas    → Canvas donde Chart.js dibuja el gráfico de línea
+    - #top-clientes-list → Lista de top 6 clientes por monto de compra
+    - #facturas-recientes → Últimas 6 facturas emitidas
+    - #stock-alertas   → Productos con stock igual o por debajo del mínimo
+
+  Los placeholders (opacity:.4, texto "Cargando…") son visibles brevemente
+  mientras las peticiones paralelas cargan los datos reales.
+-->
+
+<!-- Grilla de 4 KPIs — dashboard.js reemplaza este bloque completo con datos reales -->
+<div class="kpi-grid" id="kpis">
+
+  <!-- Placeholder KPI 1: Ventas totales -->
+  <div class="kpi-card" style="opacity:.4">
+    <div><div class="kpi-label">Cargando…</div><div class="kpi-value">—</div></div>
+    <div class="kpi-icon kpi-icon-primary"></div>
+  </div>
+
+  <!-- Placeholder KPI 2: Ventas de hoy -->
+  <div class="kpi-card" style="opacity:.4">
+    <div><div class="kpi-label">Cargando…</div><div class="kpi-value">—</div></div>
+    <div class="kpi-icon kpi-icon-success"></div>
+  </div>
+
+  <!-- Placeholder KPI 3: ITBIS generado -->
+  <div class="kpi-card" style="opacity:.4">
+    <div><div class="kpi-label">Cargando…</div><div class="kpi-value">—</div></div>
+    <div class="kpi-icon kpi-icon-warning"></div>
+  </div>
+
+  <!-- Placeholder KPI 4: Facturas pendientes (por cobrar) -->
+  <div class="kpi-card" style="opacity:.4">
+    <div><div class="kpi-label">Cargando…</div><div class="kpi-value">—</div></div>
+    <div class="kpi-icon kpi-icon-danger"></div>
+  </div>
+
+</div>
+
+<!-- Fila de gráficos: línea de ventas + lista de top clientes -->
+<div class="charts-grid">
+
+  <!-- Gráfico de línea: ventas de los últimos 30 días (Chart.js) -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Ventas últimos 30 días</div>
+      <div class="chart-sub">Ingresos diarios (RD$)</div>
+    </div>
+    <div class="chart-body">
+      <canvas id="chart-ventas"></canvas>
+    </div>
+  </div>
+
+  <!-- Top 6 clientes por monto total de compra -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Top Clientes</div>
+      <div class="chart-sub">Por monto total</div>
+    </div>
+    <!-- dashboard.js inyecta los .top-list-item aquí -->
+    <div class="chart-body" id="top-clientes-list">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Fila inferior: facturas recientes + alertas de stock -->
+<div class="bottom-grid">
+
+  <!-- Últimas 6 facturas emitidas -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Facturas recientes</div>
+    </div>
+    <!-- dashboard.js inyecta los .recent-factura aquí -->
+    <div class="chart-body" id="facturas-recientes">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Productos cuyo stock está en o por debajo del mínimo configurado -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Alertas de stock bajo</div>
+    </div>
+    <!-- dashboard.js inyecta los .stock-alert-item aquí -->
+    <div class="chart-body" id="stock-alertas">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+</div>

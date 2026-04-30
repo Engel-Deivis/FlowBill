@@ -1,0 +1,75 @@
+<!--
+  facturas.html — Fragmento de página: Gestión de Facturas
+  =========================================================
+  Importado como texto plano (?raw) por facturas.js e inyectado en #main.
+
+  Estructura:
+    1. .page-header   → Título + botón "Nueva Factura"
+    2. .filters-bar   → Filtros por estado y rango de fechas
+    3. .table-wrapper → Tabla de facturas con 7 columnas
+
+  Columnas de la tabla:
+    N° Factura | NCF | Cliente | Fecha | Total | Estado | Acciones
+
+  Notas:
+    - Los filtros disparan una nueva petición al servidor (no filtrado local),
+      porque el volumen de facturas puede ser grande.
+    - El botón "Filtrar" (#btn-filtrar) es enlazado en facturas.js.
+    - El tbody (#facturas-tbody) es rellenado por facturas.js con datos del API.
+    - El modal de "Nueva Factura" es completamente dinámico (construido en JS)
+      porque requiere cargar la lista de clientes y productos activos.
+-->
+
+<!-- Cabecera: título de la sección y acción principal -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Facturas</h1>
+    <p class="page-subtitle">Gestiona facturas y comprobantes fiscales</p>
+  </div>
+  <!-- Abre el modal de creación de nueva factura (enlazado en facturas.js) -->
+  <button class="btn btn-primary" id="btn-nueva-factura">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Nueva Factura
+  </button>
+</div>
+
+<!-- Barra de filtros: estado + rango de fechas + botón aplicar -->
+<div class="filters-bar">
+  <!-- Filtro por estado de la factura -->
+  <select class="filter-select" id="filtro-estado">
+    <option value="">Todos los estados</option>
+    <option value="PENDIENTE">Pendiente</option>
+    <option value="PAGADA">Pagada</option>
+    <option value="ANULADA">Anulada</option>
+  </select>
+
+  <!-- Filtro por fecha de emisión (rango desde–hasta) -->
+  <input type="date" class="filter-select" id="filtro-desde"  placeholder="Desde" />
+  <input type="date" class="filter-select" id="filtro-hasta"  placeholder="Hasta" />
+
+  <!-- Aplica los filtros enviando nueva petición al servidor -->
+  <button class="btn btn-secondary btn-sm" id="btn-filtrar">Filtrar</button>
+</div>
+
+<!-- Tabla de facturas -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>N° Factura</th>
+        <th>NCF</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th class="col-actions">Acciones</th>
+      </tr>
+    </thead>
+    <!-- facturas.js reemplaza este spinner con las filas de datos -->
+    <tbody id="facturas-tbody">
+      <tr><td colspan="7"><div class="spinner"></div></td></tr>
+    </tbody>
+  </table>
+</div>

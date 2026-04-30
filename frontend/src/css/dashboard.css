@@ -1,0 +1,158 @@
+/* ── Reportes: tabs de navegación entre vistas ───────────────────────────────── */
+.reportes-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+/* ── Charts ──────────────────────────────────────────────────────────────────── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.chart-header {
+  padding: 18px 24px 12px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.chart-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+
+.chart-sub {
+  font-size: .78rem;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+.chart-body {
+  padding: 16px 24px 24px;
+  position: relative;
+}
+
+.chart-body canvas {
+  max-height: 240px;
+}
+
+/* ── Bottom grid ─────────────────────────────────────────────────────────────── */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ── Top clientes list ───────────────────────────────────────────────────────── */
+.top-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.top-list-item:last-child { border-bottom: none; }
+
+.top-list-rank {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: .72rem;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.top-list-name {
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.top-list-value {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-left: 12px;
+}
+
+/* ── Alertas de stock ────────────────────────────────────────────────────────── */
+.stock-alert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.stock-alert-item:last-child { border-bottom: none; }
+
+.stock-alert-name {
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--gray-800);
+}
+
+.stock-alert-num {
+  font-weight: 700;
+  font-size: .875rem;
+}
+
+/* ── Recent facturas ─────────────────────────────────────────────────────────── */
+.recent-factura {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.recent-factura:last-child { border-bottom: none; }
+
+.recent-factura-num {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.recent-factura-cliente {
+  font-size: .875rem;
+  color: var(--gray-800);
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.recent-factura-total {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .charts-grid,
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Empresa {
+  id          String   @id @default(cuid())
+  nombre      String
+  rnc         String   @unique
+  direccion   String?
+  telefono    String?
+  email       String?
+  logo        String?
+  activa      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  usuarios    Usuario[]
+  clientes    Cliente[]
+  productos   Producto[]
+  facturas    Factura[]
+  secuenciasNcf SecuenciaNcf[]
+  movimientos MovimientoInventario[]
+
+  @@map("empresas")
+}
+
+model Usuario {
+  id         String   @id @default(cuid())
+  nombre     String
+  email      String
+  password   String
+  rol        Rol      @default(CAJERO)
+  activo     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  empresaId  String
+  empresa    Empresa  @relation(fields: [empresaId], references: [id])
+  facturas   Factura[]
+
+  @@unique([email, empresaId])
+  @@map("usuarios")
+}
+
+model Cliente {
+  id         String   @id @default(cuid())
+  nombre     String
+  cedula     String?
+  rnc        String?
+  email      String?
+  telefono   String?
+  direccion  String?
+  activo     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  empresaId  String
+  empresa    Empresa  @relation(fields: [empresaId], references: [id])
+  facturas   Factura[]
+
+  @@map("clientes")
+}
+
+model Categoria {
+  id        String     @id @default(cuid())
+  nombre    String
+  createdAt DateTime   @default(now())
+
+  productos Producto[]
+
+  @@map("categorias")
+}
+
+model Producto {
+  id          String   @id @default(cuid())
+  nombre      String
+  descripcion String?
+  codigo      String?
+  precio      Decimal  @db.Decimal(10, 2)
+  costo       Decimal? @db.Decimal(10, 2)
+  itbis       Decimal  @default(0.18) @db.Decimal(4, 2)
+  stock       Int      @default(0)
+  stockMinimo Int      @default(5)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  empresaId   String
+  empresa     Empresa    @relation(fields: [empresaId], references: [id])
+  categoriaId String?
+  categoria   Categoria? @relation(fields: [categoriaId], references: [id])
+
+  itemsFactura ItemFactura[]
+  movimientos  MovimientoInventario[]
+
+  @@map("productos")
+}
+
+model SecuenciaNcf {
+  id              String   @id @default(cuid())
+  tipoNcf         TipoNcf
+  prefijo         String
+  secuenciaMin    Int
+  secuenciaMax    Int
+  secuenciaActual Int      @default(0)
+  vencimiento     DateTime
+  activa          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  empresaId  String
+  empresa    Empresa   @relation(fields: [empresaId], references: [id])
+  facturas   Factura[]
+
+  @@unique([empresaId, tipoNcf])
+  @@map("secuencias_ncf")
+}
+
+model Factura {
+  id          String        @id @default(cuid())
+  numero      String
+  ncf         String?
+  fecha       DateTime      @default(now())
+  vencimiento DateTime?
+  subtotal    Decimal       @db.Decimal(10, 2)
+  descuento   Decimal       @default(0) @db.Decimal(10, 2)
+  itbis       Decimal       @db.Decimal(10, 2)
+  total       Decimal       @db.Decimal(10, 2)
+  estado      EstadoFactura @default(PENDIENTE)
+  notas       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  empresaId      String
+  empresa        Empresa       @relation(fields: [empresaId], references: [id])
+  clienteId      String?
+  cliente        Cliente?      @relation(fields: [clienteId], references: [id])
+  usuarioId      String
+  usuario        Usuario       @relation(fields: [usuarioId], references: [id])
+  secuenciaNcfId String?
+  secuenciaNcf   SecuenciaNcf? @relation(fields: [secuenciaNcfId], references: [id])
+
+  items ItemFactura[]
+
+  @@map("facturas")
+}
+
+model ItemFactura {
+  id        String  @id @default(cuid())
+  cantidad  Int
+  precio    Decimal @db.Decimal(10, 2)
+  descuento Decimal @default(0) @db.Decimal(10, 2)
+  itbis     Decimal @db.Decimal(10, 2)
+  subtotal  Decimal @db.Decimal(10, 2)
+
+  facturaId  String
+  factura    Factura  @relation(fields: [facturaId], references: [id], onDelete: Cascade)
+  productoId String
+  producto   Producto @relation(fields: [productoId], references: [id])
+
+  @@map("items_factura")
+}
+
+model MovimientoInventario {
+  id        String         @id @default(cuid())
+  tipo      TipoMovimiento
+  cantidad  Int
+  motivo    String?
+  createdAt DateTime       @default(now())
+
+  empresaId  String
+  empresa    Empresa  @relation(fields: [empresaId], references: [id])
+  productoId String
+  producto   Producto @relation(fields: [productoId], references: [id])
+
+  @@map("movimientos_inventario")
+}
+
+enum Rol {
+  SUPERADMIN
+  ADMIN
+  CAJERO
+}
+
+enum TipoNcf {
+  B01
+  B02
+  B14
+  B15
+  B16
+}
+
+enum EstadoFactura {
+  PENDIENTE
+  PAGADA
+  ANULADA
+}
+
+enum TipoMovimiento {
+  ENTRADA
+  SALIDA
+  AJUSTE
+}

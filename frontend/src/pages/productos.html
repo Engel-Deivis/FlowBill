@@ -1,0 +1,69 @@
+<!--
+  productos.html — Fragmento de página: Catálogo de Productos y Servicios
+  ========================================================================
+  Importado como texto plano (?raw) por productos.js e inyectado en #main.
+
+  Estructura:
+    1. .page-header   → Título + botón "Nuevo Producto"
+    2. .toolbar       → Campo de búsqueda en tiempo real (filtra por nombre o código SKU)
+    3. .table-wrapper → Tabla de productos con 7 columnas
+
+  Columnas de la tabla:
+    Producto | Código (SKU) | Precio | ITBIS | Stock | Categoría | Acciones
+
+  Indicadores de stock (CSS):
+    stock-ok      → Stock por encima del mínimo (texto sin clase especial)
+    stock-warning → Stock igual o por debajo del mínimo configurado (amarillo)
+    stock-danger  → Stock en cero / agotado (rojo)
+
+  Notas:
+    - La búsqueda filtra el caché en memoria (sin petición al servidor).
+    - Los valores de ITBIS se almacenan como decimal (0.18) y se muestran como % (18%).
+    - El tbody (#productos-tbody) es rellenado por productos.js con datos del API.
+    - Los modales de creación/edición se construyen en productos.js porque
+      requieren cargar las categorías disponibles dinámicamente.
+-->
+
+<!-- Cabecera: título de la sección y acción principal -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Productos</h1>
+    <p class="page-subtitle">Catálogo de productos y servicios</p>
+  </div>
+  <!-- Abre el modal de creación de producto (enlazado en productos.js) -->
+  <button class="btn btn-primary" id="btn-nuevo-producto">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Nuevo Producto
+  </button>
+</div>
+
+<!-- Barra de búsqueda — filtra por nombre o código SKU en tiempo real -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search-productos"
+           placeholder="Buscar por nombre o código…" />
+  </div>
+</div>
+
+<!-- Tabla de productos -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Código</th>
+        <th>Precio</th>
+        <th>ITBIS</th>
+        <th>Stock</th>
+        <th>Categoría</th>
+        <th class="col-actions">Acciones</th>
+      </tr>
+    </thead>
+    <!-- productos.js reemplaza este spinner con las filas de datos -->
+    <tbody id="productos-tbody">
+      <tr><td colspan="7"><div class="spinner"></div></td></tr>
+    </tbody>
+  </table>
+</div>
