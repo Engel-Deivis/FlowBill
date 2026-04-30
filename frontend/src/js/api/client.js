@@ -14,8 +14,11 @@
  *   - NUNCA se expone el token en URLs ni en logs.
  */
 
-/** Prefijo de todas las rutas del backend. El proxy de Vite redirige /api → backend. */
-const BASE = '/api'
+/** Prefijo de todas las rutas del backend.
+ *  Dev: proxy de Vite redirige /api → localhost:3001
+ *  Prod: VITE_API_BASE apunta al servicio de Vercel (/_/backend/api)
+ */
+const BASE = import.meta.env.VITE_API_BASE || '/api'
 
 /** Lee el token JWT almacenado en localStorage tras el login. */
 const getToken = () => localStorage.getItem('fb_token')
