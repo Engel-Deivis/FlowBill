@@ -3,6 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install"
+    "build": "cd frontend && npm install && npm run build",
+    "postinstall": "prisma generate --schema=backend/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "pdfkit": "^0.18.0",
+    "pg": "^8.20.0",
+    "prisma": "^7.8.0",
+    "zod": "^4.3.6"
   }
 }
