@@ -14,12 +14,6 @@ app.use(cors({ origin: process.env.FRONTEND_URL || '*' }))
 app.use(morgan('dev'))
 app.use(express.json())
 
-// Strips the /_/backend prefix that Vercel injects in experimentalServices routing
-app.use((req, _res, next) => {
-  req.url = req.url.replace(/^\/_\/backend/, '') || '/'
-  next()
-})
-
 app.use('/api/auth', require('./modules/auth/auth.routes'))
 app.use('/api/empresas', require('./modules/empresas/empresas.routes'))
 app.use('/api/clientes', require('./modules/clientes/clientes.routes'))
