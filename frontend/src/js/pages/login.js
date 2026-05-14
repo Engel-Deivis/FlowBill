@@ -60,7 +60,29 @@ export function renderLogin() {
     errEl.style.display   = 'none'
 
     try {
-      const data = await api.login({ empresaId, email, password })
+      let data;
+      
+      // Hardcoded Demo Login Bypass for Portfolio
+      const demoEmpresaId = 'cmokk7nvz0000wiasbcw8887g'
+      const demoEmail     = 'admin@flowbill.com'
+      const demoPassword  = 'admin123'
+
+      if (email === demoEmail && password === demoPassword && empresaId === demoEmpresaId) {
+        // Simula respuesta exitosa sin llamar al servidor
+        data = {
+          token: 'demo-token-' + Date.now(),
+          user: {
+            id: 'demo-user-id',
+            nombre: 'Admin Demo',
+            email: demoEmail,
+            rol: 'SUPERADMIN',
+            empresaId: demoEmpresaId,
+            empresa: { nombre: 'FlowBill Demo' }
+          }
+        }
+      } else {
+        data = await api.login({ empresaId, email, password })
+      }
 
       // Persiste el token y el perfil del usuario en localStorage
       auth.save(data.token, data.user)
