@@ -14,6 +14,14 @@
  *   - NUNCA se expone el token en URLs ni en logs.
  */
 
+import { mockApi } from './mockData.js'
+
+/** Comprueba si estamos en modo demo (token empieza con demo-token) */
+const isDemoMode = () => {
+  const token = localStorage.getItem('fb_token')
+  return token && token.startsWith('demo-token-')
+}
+
 /** Prefijo de todas las rutas del backend.
  *  Dev: proxy de Vite redirige /api → localhost:3001
  *  Prod: VITE_API_BASE apunta al servicio de Vercel (/_/backend/api)
@@ -63,7 +71,7 @@ const request = async (method, path, body) => {
  * API pública del frontend.
  * Cada sección corresponde a un recurso del backend REST.
  */
-export const api = {
+const _realApi = {
 
   /* Atajos de verbo HTTP (para llamadas ad-hoc fuera de los recursos definidos) */
   get:    (path)         => request('GET',    path),
@@ -171,6 +179,46 @@ export const api = {
     inventario:   ()       => request('GET', '/reportes/inventario'),
   },
 }
+
+/**
+ * Proxy inteligente: si el usuario está en modo demo, usa mockApi.
+ * Si no, usa la API real del backend. Esto permite que el portafolio
+ * funcione al 100% sin necesidad de un backend corriendo.
+ */
+function createProxy(target) {
+  return new Proxy(target, {
+    get(obj, prop) {
+      // Login siempre intenta mockApi primero para credenciales demo
+      if (prop === 'login') {
+        return async (body) => {
+          try { return mockApi.login(body) }
+          catch { return _realApi.login(body) }
+        }
+      }
+      if (isDemoMode() && prop in mockApi) {
+        const val = mockApi[prop]
+        // Si es un objeto nested (clientes, productos, etc), wrapearlo con async
+        if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+          return new Proxy(val, {
+            get(nested, fn) {
+              if (typeof nested[fn] === 'function') {
+                return async (...args) => nested[fn](...args)
+              }
+              return nested[fn]
+            }
+          })
+        }
+        if (typeof val === 'function') {
+          return async (...args) => val(...args)
+        }
+        return val
+      }
+      return obj[prop]
+    }
+  })
+}
+
+export const api = createProxy(_realApi)
 
 /**
  * Utilidades de sesión del usuario.
